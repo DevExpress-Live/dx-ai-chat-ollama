@@ -1,0 +1,22 @@
+<style>
+.demo-container {
+  margin: 20px;
+}
+.dx-chat-disabled {
+  opacity: 0.8;
+}
+</style>
+
+<div class="demo-container">
+  <dx-chat
+    [class.dx-chat-disabled]="isProcessing"
+    [dataSource]="dataSource"
+    [reloadOnChange]="false"
+    [user]="user"
+    [height]="600"
+    [typingUsers]="typingUsers()"
+    [alerts]="alerts()"
+    (onMessageEntered)="onMessageEntered($event)"
+  >
+  </dx-chat>
+</div>
