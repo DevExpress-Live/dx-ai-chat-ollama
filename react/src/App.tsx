@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from "react";
 import Chat, { type ChatTypes } from "devextreme-react/chat";
-import { type MessageEnteredEvent } from "devextreme/ui/chat";
 import { user, assistant } from "./data";
 import { dataSource, useApi } from "./useApi";
 
@@ -22,7 +21,7 @@ const App: React.FC = () => {
   );
 
   const onMessageEntered = useCallback(
-    async ({ message }: MessageEnteredEvent) => {
+    async ({ message }: ChatTypes.MessageEnteredEvent) => {
       if (!message) return;
       insertMessage({ id: Date.now(), ...message });
       if (!alerts.length) {
@@ -37,6 +36,7 @@ const App: React.FC = () => {
       <Chat
         className={isProcessing ? "dx-chat-disabled" : ""}
         dataSource={dataSource}
+        showAvatar={false}
         user={user}
         height={600}
         onMessageEntered={onMessageEntered}
