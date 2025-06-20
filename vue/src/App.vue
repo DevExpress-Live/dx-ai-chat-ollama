@@ -59,31 +59,18 @@ async function getAIResponse(messages) {
     body: JSON.stringify({
       model: "llama3.2",
       messages,
-      stream: true,
+      stream: false,
     }),
   });
 
   if (!response.ok || !response.body)
     throw new Error("Failed to connect to Ollama");
-  const reader = response.body.getReader();
-  const decoder = new TextDecoder("utf-8");
-  let result = "";
 
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    const chunk = decoder.decode(value, { stream: true });
-    for (const line of chunk.split("\n")) {
-      if (!line.trim()) continue;
-      try {
-        const json = JSON.parse(line);
-        result += json.message?.content ?? "";
-      } catch (err) {
-        console.error("Error parsing AI response:", err);
-      }
-    }
-  }
-  return result;
+  const data = await response.json();
+  const content = data.message.content ?? '';
+  if (!content)
+    throw new Error('No content in response');
+  return content;
 }
 
 function insertMessage(data) {
