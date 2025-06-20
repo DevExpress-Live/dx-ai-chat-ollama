@@ -69,7 +69,7 @@ const getAIResponse = async (messages: OllamaMessage[]) => {
   }
 
   const data = await response.json();
-  const content = data.message?.content ?? data.choices?.[0]?.message?.content ?? '';
+  const content = data.message?.content ?? '';
   if (!content) {
     throw new Error('No content in response');
   }
