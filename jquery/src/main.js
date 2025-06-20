@@ -48,7 +48,9 @@ function getMessageHistory() {
 
 // Call Ollama streaming endpoint
 async function getAIResponse(messages) {
+  //
   // replace with your Ollama host URL
+  //
   const resp = await fetch("http://OLLAMA_HOST:11434/api/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -57,26 +59,12 @@ async function getAIResponse(messages) {
   if (!resp.ok || !resp.body) {
     throw new Error("Ollama connection failed");
   }
-  const reader = resp.body.getReader();
-  const decoder = new TextDecoder("utf-8");
-  let result = "";
-
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    const chunk = decoder.decode(value, { stream: true });
-    for (const line of chunk.split("\n")) {
-      if (!line.trim()) continue;
-      try {
-        const json = JSON.parse(line);
-        result += json.message?.content || "";
-      } catch (e) {
-        console.warn("Broken chunk:", line);
-      }
-    }
+  const data = await resp.json();
+  const content = data.message.content ?? '';
+  if (!content) {
+    throw new Error('No content in response');
   }
-
-  return result;
+  return content;
 }
 
 // Initialize the DevExtreme Chat widget
