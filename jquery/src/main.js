@@ -54,7 +54,7 @@ async function getAIResponse(messages) {
   const resp = await fetch("http://OLLAMA_HOST:11434/api/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ model: "llama3.2", messages, stream: true }),
+    body: JSON.stringify({ model: "llama3.2", messages, stream: false }),
   });
   if (!resp.ok || !resp.body) {
     throw new Error("Ollama connection failed");
